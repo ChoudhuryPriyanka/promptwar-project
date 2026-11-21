@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Generated Video Detection | DeepDetect Forensics</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js for Forensic Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Cyber Background Atmosphere -->
+    <div class="cyber-bg">
+        <div class="grid-overlay"></div>
+        <div class="ambient-glow glow-cyan"></div>
+        <div class="ambient-glow glow-violet"></div>
+        <div class="ambient-glow glow-crimson"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="app-header">
+        <div class="nav-container">
+            <div class="brand-group">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-shield-halved logo-icon"></i>
+                    <span class="scan-laser-pulse"></span>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">
+                        <span class="title-main">DeepDetect</span><span class="title-accent">.AI</span>
+                    </div>
+                    <span class="brand-subtitle">AI Generated Video Detection Platform</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#detector-section" class="nav-link active"><i class="fa-solid fa-radar"></i> Live Detector</a>
+                <a href="#samples-section" class="nav-link"><i class="fa-solid fa-film"></i> Test Samples</a>
+                <a href="#how-it-works" class="nav-link"><i class="fa-solid fa-microchip"></i> How It Works</a>
+                <a href="#history-section" class="nav-link"><i class="fa-solid fa-clock-rotate-left"></i> Scan History</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="engine-badge" id="engineStatusBadge" title="Browser-side WebAssembly & Canvas Forensic Engine">
+                    <span class="status-dot online"></span>
+                    <span class="engine-text">Neural Core v2.4</span>
+                </div>
+                <button class="btn btn-outline-cyber" id="openBackendModalBtn">
+                    <i class="fa-solid fa-server"></i> <span>Python API</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="badge-tag">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Next-Gen Deepfake & Synthetic Video Forensics</span>
+            </div>
+            <h1 class="hero-title">
+                Detect <span class="gradient-text">AI Generated Videos</span> With Frame-By-Frame Neural Forensics
+            </h1>
+            <p class="hero-description">
+                Inspect video uploads for diffusion artifacts, temporal morphing, facial boundary blending, synthetic frequency noise, and generative audio-visual discrepancies.
+            </p>
+        </section>
+
+        <!-- Video Detection Workspace Section -->
+        <section class="detector-section" id="detector-section">
+            <div class="detector-card glass-panel">
+                
+                <!-- Tab Controls: Upload, URL, Webcam, Samples -->
+                <div class="detector-tabs">
+                    <button class="tab-btn active" data-tab="uploadTab">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload Video File
+                    </button>
+                    <button class="tab-btn" data-tab="urlTab">
+                        <i class="fa-solid fa-link"></i> Video URL
+                    </button>
+                    <button class="tab-btn" data-tab="webcamTab">
+                        <i class="fa-solid fa-camera"></i> Live Webcam Record
+                    </button>
+                    <button class="tab-btn" data-tab="samplesTab">
+                        <i class="fa-solid fa-box-archive"></i> Benchmark Samples
+                    </button>
+                </div>
+
+                <!-- Tab 1: File Upload -->
+                <div class="tab-content active" id="uploadTab">
+                    <div class="dropzone" id="videoDropzone">
+                        <input type="file" id="videoFileInput" accept="video/mp4,video/webm,video/quicktime,video/x-matroska" hidden>
+                        <div class="dropzone-visual">
+                            <div class="dropzone-icon-ring">
+                                <i class="fa-solid fa-file-video dropzone-icon"></i>
+                            </div>
+                            <h3 class="dropzone-title">Drag & Drop Your Video Here</h3>
+                            <p class="dropzone-hint">Supports MP4, WebM, MOV, MKV (Up to 100MB)</p>
+                            <div class="dropzone-action-btn">
+                                <button type="button" class="btn btn-primary" id="browseFileBtn">
+                                    <i class="fa-solid fa-folder-open"></i> Browse Video
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: URL Input -->
+                <div class="tab-content" id="urlTab">
+                    <div class="url-input-container">
+                        <label for="videoUrlInput" class="input-label">Enter Direct MP4/WebM Video URL:</label>
+                        <div class="url-input-group">
+                            <i class="fa-solid fa-globe input-icon"></i>
+                            <input type="url" id="videoUrlInput" placeholder="https://example.com/sample-video.mp4" class="cyber-input">
+                            <button class="btn btn-primary" id="loadUrlBtn">
+                                <i class="fa-solid fa-arrow-right"></i> Load Video
+                            </button>
+                        </div>
+                        <p class="input-tip">Tip: Enter any direct video link to test online footage.</p>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Webcam Record -->
+                <div class="tab-content" id="webcamTab">
+                    <div class="webcam-container">
+                        <div class="webcam-preview-box">
+                            <video id="webcamPreview" autoplay playsinline muted></video>
+                            <div class="webcam-overlay" id="webcamOverlay">
+                                <i class="fa-solid fa-video"></i>
+                                <span>Camera Preview Not Active</span>
+                            </div>
+                        </div>
+                        <div class="webcam-actions">
+                            <button class="btn btn-outline-cyber" id="startCameraBtn">
+                                <i class="fa-solid fa-camera"></i> Start Camera
+                            </button>
+                            <button class="btn btn-danger" id="recordBtn" disabled>
+                                <i class="fa-solid fa-circle-dot"></i> Record 4s Test Clip
+                            </button>
+                            <span class="record-timer" id="recordTimer">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Benchmark Samples Quick Grid -->
+                <div class="tab-content" id="samplesTab">
+                    <div class="sample-cards-grid">
+                        <div class="sample-card" data-sample="sora">
+                            <div class="sample-thumb sora-bg">
+                                <span class="sample-tag tag-ai">AI Diffusion</span>
+                                <i class="fa-solid fa-play play-sample-icon"></i>
+                            </div>
+                            <div class="sample-info">
+                                <h4>Sora Synthetic Tokyo Street</h4>
+                                <p>Spatio-temporal diffusion artifacts & physics anomalies</p>
+                            </div>
+                        </div>
+                        <div class="sample-card" data-sample="deepfake">
+                            <div class="sample-thumb deepfake-bg">
+                                <span class="sample-tag tag-ai">Deepfake Face-Swap</span>
+                                <i class="fa-solid fa-play play-sample-icon"></i>
+                            </div>
+                            <div class="sample-info">
+                                <h4>Politician Face Replacement</h4>
+                                <p>Facial boundary blending seams & eye-blink irregularities</p>
+                            </div>
+                        </div>
+                        <div class="sample-card" data-sample="authentic">
+                            <div class="sample-thumb authentic-bg">
+                                <span class="sample-tag tag-real">Authentic DSLR</span>
+                                <i class="fa-solid fa-play play-sample-icon"></i>
+                            </div>
+                            <div class="sample-info">
+                                <h4>Studio Interview 4K</h4>
+                                <p>Natural optical sensor Bayer noise & coherent physics</p>
+                            </div>
+                        </div>
+                        <div class="sample-card" data-sample="lipsync">
+                            <div class="sample-thumb lipsync-bg">
+                                <span class="sample-tag tag-ai">AI Voice Avatar</span>
+                                <i class="fa-solid fa-play play-sample-icon"></i>
+                            </div>
+                            <div class="sample-info">
+                                <h4>ElevenLabs Voice + SadTalker</h4>
+                                <p>High-frequency spectral audio cutoff & lip desync</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing Pipeline State (Scanning in progress) -->
+                <div class="scanning-state-container" id="scanningState" style="display: none;">
+                    <div class="scanning-header">
+                        <div class="spinner-ring"></div>
+                        <div class="scanning-text-wrap">
+                            <h3 class="scanning-title" id="scanStepTitle">Deconstructing Video Stream...</h3>
+                            <p class="scanning-subtitle" id="scanStepDetail">Sampling keyframes and computing pixel motion vectors...</p>
+                        </div>
+                        <div class="scan-percentage" id="scanPercent">0%</div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar-shell">
+                        <div class="progress-bar-fill" id="scanProgressBar"></div>
+                    </div>
+
+                    <!-- Pipeline Step Badges -->
+                    <div class="pipeline-steps">
+                        <div class="step-node active" id="step1">
+                            <div class="node-circle"><i class="fa-solid fa-film"></i></div>
+                            <span>Frame Extraction</span>
+                        </div>
+                        <div class="step-line" id="line1"></div>
+                        <div class="step-node" id="step2">
+                            <div class="node-circle"><i class="fa-solid fa-cubes"></i></div>
+                            <span>Temporal Motion</span>
+                        </div>
+                        <div class="step-line" id="line2"></div>
+                        <div class="step-node" id="step3">
+                            <div class="node-circle"><i class="fa-solid fa-face-smile"></i></div>
+                            <span>Facial & Edge FFT</span>
+                        </div>
+                        <div class="step-line" id="line3"></div>
+                        <div class="step-node" id="step4">
+                            <div class="node-circle"><i class="fa-solid fa-waveform-lines"></i></div>
+                            <span>Spectral Audio</span>
+                        </div>
+                        <div class="step-line" id="line4"></div>
+                        <div class="step-node" id="step5">
+                            <div class="node-circle"><i class="fa-solid fa-brain"></i></div>
+                            <span>Neural Verdict</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Frame Extraction Preview -->
+                    <div class="live-frames-preview">
+                        <span class="preview-label">Extracted Keyframes Stream:</span>
+                        <div class="frames-carousel" id="liveFramesCarousel">
+                            <!-- Injected dynamically during scan -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Video Player & Controller (When video is loaded) -->
+                <div class="video-preview-wrapper" id="videoPreviewWrapper" style="display: none;">
+                    <div class="video-preview-header">
+                        <div class="file-meta-badge">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span id="videoFileNameDisplay">sample_video.mp4</span>
+                            <span class="meta-tag" id="videoResolutionDisplay">1920x1080</span>
+                            <span class="meta-tag" id="videoDurationDisplay">00:08</span>
+                            <span class="meta-tag" id="videoFpsDisplay">30 fps</span>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="btn btn-sm btn-outline" id="changeVideoBtn">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> Change Video
+                            </button>
+                            <button class="btn btn-sm btn-primary glow" id="runAnalysisBtn">
+                                <i class="fa-solid fa-bolt"></i> Run Detection Analysis
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="video-stage">
+                        <video id="targetVideoPlayer" controls playsinline></video>
+                        <canvas id="forensicCanvas" style="display: none;"></canvas>
+                        <div class="video-laser-scanner" id="videoLaserScanner" style="display: none;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FORENSIC RESULTS DASHBOARD -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <div class="results-header-banner">
+                <div class="results-title-group">
+                    <span class="badge-tag"><i class="fa-solid fa-square-poll-vertical"></i> Forensic Diagnostic Report</span>
+                    <h2>Video Verification Analysis Result</h2>
+                </div>
+                <div class="report-actions">
+                    <button class="btn btn-outline-cyber" id="printReportBtn">
+                        <i class="fa-solid fa-print"></i> Print / PDF Report
+                    </button>
+                    <button class="btn btn-outline-cyber" id="exportJsonBtn">
+                        <i class="fa-solid fa-download"></i> Export JSON
+                    </button>
+                    <button class="btn btn-outline-cyber" id="shareScanBtn">
+                        <i class="fa-solid fa-share-nodes"></i> Share Result
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Verdict & Score Banner -->
+            <div class="verdict-banner-card glass-panel" id="verdictBanner">
+                <div class="verdict-left">
+                    <div class="verdict-badge-large" id="verdictBadge">
+                        <i class="fa-solid fa-triangle-exclamation" id="verdictIcon"></i>
+                        <span id="verdictText">AI GENERATED</span>
+                    </div>
+                    <h3 class="verdict-headline" id="verdictHeadline">High Likelihood of Generative Neural Synthesis</h3>
+                    <p class="verdict-explanation" id="verdictExplanation">
+                        Forensic inspection detected structural spatial diffusion noise patterns, high-frequency spectral roll-off, and inter-frame temporal warping characteristic of modern generative video models.
+                    </p>
+                    
+                    <div class="verdict-metadata-row">
+                        <div class="meta-item">
+                            <span class="meta-label">SHA-256 Video Fingerprint:</span>
+                            <span class="meta-val mono" id="videoHashDisplay">e3b0c44298fc1c149afbf4c8996fb924...</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Analysis Timestamp:</span>
+                            <span class="meta-val" id="scanTimestampDisplay">Nov 21, 2026 • 10:52 AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confidence Gauge Meter -->
+                <div class="verdict-right">
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <!-- Background track -->
+                            <circle class="gauge-bg" cx="100" cy="100" r="82" stroke-width="16" fill="none" />
+                            <!-- Colored progress -->
+                            <circle class="gauge-fill" id="gaugeProgress" cx="100" cy="100" r="82" stroke-width="16" fill="none" stroke-dasharray="515" stroke-dashoffset="100" />
+                        </svg>
+                        <div class="gauge-data">
+                            <span class="gauge-percent" id="aiProbabilityScore">94.8%</span>
+                            <span class="gauge-label">AI Generation Probability</span>
+                        </div>
+                    </div>
+                    <div class="confidence-label-tag" id="confidenceRatingTag">Very High Confidence</div>
+                </div>
+            </div>
+
+            <!-- Forensic Metrics Breakdown Grid -->
+            <div class="metrics-dashboard-grid">
+                
+                <!-- Card 1: Metric Breakdown Bars -->
+                <div class="dashboard-card glass-panel">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-chart-simple text-cyan"></i>
+                            <h3>Forensic Parameter Breakdown</h3>
+                        </div>
+                        <span class="card-tag">5 Vectors Evaluated</span>
+                    </div>
+                    
+                    <div class="metric-bars-container">
+                        <div class="metric-row">
+                            <div class="metric-info">
+                                <span class="metric-name">Temporal Motion Coherence</span>
+                                <span class="metric-val" id="valTemporal">89% AI</span>
+                            </div>
+                            <div class="metric-track">
+                                <div class="metric-bar-fill bar-red" id="barTemporal" style="width: 89%;"></div>
+                            </div>
+                            <span class="metric-desc">Checks for unnatural pixel morphing and jitter between frames</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <div class="metric-info">
+                                <span class="metric-name">Spatial Sensor Noise vs Diffusion</span>
+                                <span class="metric-val" id="valNoise">96% AI</span>
+                            </div>
+                            <div class="metric-track">
+                                <div class="metric-bar-fill bar-red" id="barNoise" style="width: 96%;"></div>
+                            </div>
+                            <span class="metric-desc">Detects absence of physical camera ISO/Bayer sensor noise</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <div class="metric-info">
+                                <span class="metric-name">Facial & Edge Gradient Boundary</span>
+                                <span class="metric-val" id="valFacial">91% AI</span>
+                            </div>
+                            <div class="metric-track">
+                                <div class="metric-bar-fill bar-red" id="barFacial" style="width: 91%;"></div>
+                            </div>
+                            <span class="metric-desc">Analyzes seam blurring around head, ears, and teeth</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <div class="metric-info">
+                                <span class="metric-name">High-Frequency Fourier FFT Spectrum</span>
+                                <span class="metric-val" id="valFourier">88% AI</span>
+                            </div>
+                            <div class="metric-track">
+                                <div class="metric-bar-fill bar-red" id="barFourier" style="width: 88%;"></div>
+                            </div>
+                            <span class="metric-desc">Exposes GAN checkerboard or diffusion high-pass artifacts</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <div class="metric-info">
+                                <span class="metric-name">Audio-Visual Lip Sync & Voice Naturalness</span>
+                                <span class="metric-val" id="valAudio">82% AI</span>
+                            </div>
+                            <div class="metric-track">
+                                <div class="metric-bar-fill bar-red" id="barAudio" style="width: 82%;"></div>
+                            </div>
+                            <span class="metric-desc">Identifies synthetic voice spectral cutoff & phoneme desync</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Radar Forensic Chart -->
+                <div class="dashboard-card glass-panel">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-radar text-violet"></i>
+                            <h3>Neural Synthesis Signature</h3>
+                        </div>
+                        <span class="card-tag">Multimodal Radar</span>
+                    </div>
+                    <div class="radar-chart-container">
+                        <canvas id="forensicRadarChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Temporal Risk Timeline Scrubber -->
+            <div class="dashboard-card glass-panel timeline-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-wave-square text-cyan"></i>
+                        <h3>Video Timeline Synthetic Artifact Density</h3>
+                    </div>
+                    <span class="card-tag">Second-by-Second Risk Index</span>
+                </div>
+                <p class="section-subtext">Click any point on the timeline or scrubber to jump to that timestamp in the video.</p>
+                <div class="timeline-visual-bar" id="timelineBar">
+                    <!-- Dynamic segments injected here -->
+                </div>
+                <div class="timeline-axis">
+                    <span>00:00</span>
+                    <span id="timelineMidPoint">00:04</span>
+                    <span id="timelineEndPoint">00:08</span>
+                </div>
+            </div>
+
+            <!-- Interactive Keyframe Inspector -->
+            <div class="dashboard-card glass-panel keyframe-inspector-card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-magnifying-glass-arrow-right text-emerald"></i>
+                        <h3>Deep Frame Inspector & Forensic Filters</h3>
+                    </div>
+                    <div class="filter-pills">
+                        <button class="filter-btn active" data-filter="normal">
+                            <i class="fa-regular fa-image"></i> Original
+                        </button>
+                        <button class="filter-btn" data-filter="heatmap">
+                            <i class="fa-solid fa-fire"></i> AI Artifact Heatmap
+                        </button>
+                        <button class="filter-btn" data-filter="laplacian">
+                            <i class="fa-solid fa-bolt"></i> Gradient Edge (Laplace)
+                        </button>
+                        <button class="filter-btn" data-filter="noise">
+                            <i class="fa-solid fa-braille"></i> Sensor Noise Residual
+                        </button>
+                        <button class="filter-btn" data-filter="ela">
+                            <i class="fa-solid fa-layer-group"></i> Error Level Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inspector-layout">
+                    <!-- Filmstrip Selector -->
+                    <div class="filmstrip-scroll" id="keyframeFilmstrip">
+                        <!-- Keyframe cards injected via JS -->
+                    </div>
+
+                    <!-- Large Interactive Frame Viewer -->
+                    <div class="frame-viewer-box">
+                        <div class="frame-canvas-stage">
+                            <canvas id="activeFrameCanvas"></canvas>
+                            <div class="frame-tag-overlay" id="frameTagOverlay">
+                                Frame #04 (00:01.8) • Artifact Score: 96%
+                            </div>
+                        </div>
+                        <div class="frame-inspector-details" id="frameInspectorDetails">
+                            <h4>Frame Diagnostics:</h4>
+                            <ul class="finding-list">
+                                <li><i class="fa-solid fa-circle-exclamation text-crimson"></i> <strong>Micro-texture loss:</strong> Consistent smoothing across epidermal and background boundaries.</li>
+                                <li><i class="fa-solid fa-circle-exclamation text-crimson"></i> <strong>Frequency anomaly:</strong> Synthetic diffusion noise profile detected via FFT analysis.</li>
+                                <li><i class="fa-solid fa-circle-check text-emerald"></i> <strong>Codec integrity:</strong> Normal H.264 I-Frame block structure.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suspected Generator Profile Card -->
+            <div class="dashboard-card glass-panel">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-fingerprint text-violet"></i>
+                        <h3>Suspected Model Family & Generator Fingerprint</h3>
+                    </div>
+                </div>
+                <div class="generator-match-grid">
+                    <div class="model-match-item">
+                        <span class="match-name">OpenAI Sora / Latent Diffusion</span>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar-fill" id="matchSora" style="width: 88%;"></div>
+                        </div>
+                        <span class="match-percent" id="pctSora">88%</span>
+                    </div>
+                    <div class="model-match-item">
+                        <span class="match-name">Runway Gen-3 / Pika Labs</span>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar-fill" id="matchRunway" style="width: 79%;"></div>
+                        </div>
+                        <span class="match-percent" id="pctRunway">79%</span>
+                    </div>
+                    <div class="model-match-item">
+                        <span class="match-name">DeepFaceLab / RoOP Face-Swap</span>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar-fill" id="matchDeepfake" style="width: 42%;"></div>
+                        </div>
+                        <span class="match-percent" id="pctDeepfake">42%</span>
+                    </div>
+                    <div class="model-match-item">
+                        <span class="match-name">SadTalker / LivePortrait Lip-Sync</span>
+                        <div class="match-bar-wrap">
+                            <div class="match-bar-fill" id="matchLipSync" style="width: 35%;"></div>
+                        </div>
+                        <span class="match-percent" id="pctLipSync">35%</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Test Samples Section -->
+        <section class="samples-overview-section" id="samples-section">
+            <div class="section-header-center">
+                <span class="badge-tag"><i class="fa-solid fa-database"></i> Pre-Loaded Benchmarks</span>
+                <h2>Test Ground-Truth Sample Videos</h2>
+                <p>Click any pre-configured benchmark to load and run full forensic analysis instantly.</p>
+            </div>
+
+            <div class="samples-container-grid">
+                <div class="benchmark-card" onclick="loadPredefinedSample('sora')">
+                    <div class="bench-thumb sora-bg">
+                        <span class="status-pill pill-ai">AI Diffusion</span>
+                        <button class="bench-play-btn"><i class="fa-solid fa-microchip"></i> Test Sample</button>
+                    </div>
+                    <div class="bench-body">
+                        <h3>Sora / Runway Latent Diffusion</h3>
+                        <p>High-resolution cinematic generated video. Exhibits optical physics anomalies and temporal background morphing.</p>
+                        <div class="bench-footer">
+                            <span><i class="fa-solid fa-clock"></i> 5.2s</span>
+                            <span class="text-crimson"><i class="fa-solid fa-robot"></i> 95% AI Ground Truth</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card" onclick="loadPredefinedSample('deepfake')">
+                    <div class="bench-thumb deepfake-bg">
+                        <span class="status-pill pill-ai">GAN Face-Swap</span>
+                        <button class="bench-play-btn"><i class="fa-solid fa-microchip"></i> Test Sample</button>
+                    </div>
+                    <div class="bench-body">
+                        <h3>Deepfake Facial Replacement</h3>
+                        <p>Real body footage with neural facial identity grafted. Shows boundary blend seams and blink cadence jitter.</p>
+                        <div class="bench-footer">
+                            <span><i class="fa-solid fa-clock"></i> 4.5s</span>
+                            <span class="text-crimson"><i class="fa-solid fa-robot"></i> 92% AI Ground Truth</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card" onclick="loadPredefinedSample('authentic')">
+                    <div class="bench-thumb authentic-bg">
+                        <span class="status-pill pill-real">Authentic Camera</span>
+                        <button class="bench-play-btn"><i class="fa-solid fa-microchip"></i> Test Sample</button>
+                    </div>
+                    <div class="bench-body">
+                        <h3>Genuine 4K DSLR Camera</h3>
+                        <p>Recorded with a Sony Alpha sensor. Exhibits physical optical dispersion, natural Bayer sensor noise, and coherent physics.</p>
+                        <div class="bench-footer">
+                            <span><i class="fa-solid fa-clock"></i> 6.0s</span>
+                            <span class="text-emerald"><i class="fa-solid fa-circle-check"></i> 98% Authentic</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benchmark-card" onclick="loadPredefinedSample('lipsync')">
+                    <div class="bench-thumb lipsync-bg">
+                        <span class="status-pill pill-ai">Speech Avatar</span>
+                        <button class="bench-play-btn"><i class="fa-solid fa-microchip"></i> Test Sample</button>
+                    </div>
+                    <div class="bench-body">
+                        <h3>AI Voice Cloned Lip-Sync</h3>
+                        <p>Cloned audio speech driving synthesized mouth movements. Displays audio spectral cutoff and phoneme desynchronization.</p>
+                        <div class="bench-footer">
+                            <span><i class="fa-solid fa-clock"></i> 4.8s</span>
+                            <span class="text-crimson"><i class="fa-solid fa-robot"></i> 89% AI Ground Truth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works-section" id="how-it-works">
+            <div class="section-header-center">
+                <span class="badge-tag"><i class="fa-solid fa-atom"></i> Forensic Architecture</span>
+                <h2>How AI Video Detection Operates</h2>
+                <p>Modern generative AI videos are convincing to the naked human eye, but leave distinct mathematical fingerprints.</p>
+            </div>
+
+            <div class="tech-steps-grid">
+                <div class="tech-card glass-panel">
+                    <div class="tech-icon-box cyan-glow">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3>1. Spatio-Temporal Consistency</h3>
+                    <p>
+                        Video diffusion models predict frames sequentially or in 3D latent spaces. Micro-inconsistencies arise between frames, causing background objects to subtly morph or flicker when tracked across optical flow vectors.
+                    </p>
+                </div>
+
+                <div class="tech-card glass-panel">
+                    <div class="tech-icon-box violet-glow">
+                        <i class="fa-solid fa-camera-rotate"></i>
+                    </div>
+                    <h3>2. Sensor Noise & PRNU Profiling</h3>
+                    <p>
+                        Every real optical camera sensor has Photo-Response Non-Uniformity (PRNU) and Poisson-Gaussian sensor noise. AI generated videos are generated from smooth mathematical distributions and lack genuine optical sensor noise.
+                    </p>
+                </div>
+
+                <div class="tech-card glass-panel">
+                    <div class="tech-icon-box crimson-glow">
+                        <i class="fa-solid fa-wave-square"></i>
+                    </div>
+                    <h3>3. High-Frequency Fourier (FFT)</h3>
+                    <p>
+                        Convolutional and deconvolutional upsampling in generative networks creates distinct periodic checkerboard patterns and high-frequency spectral roll-offs visible only in 2D Discrete Fourier Transforms.
+                    </p>
+                </div>
+
+                <div class="tech-card glass-panel">
+                    <div class="tech-icon-box emerald-glow">
+                        <i class="fa-solid fa-headphones-simple"></i>
+                    </div>
+                    <h3>4. Multimodal Audio-Visual Sync</h3>
+                    <p>
+                        Synthetic voices generated by neural TTS models often clip sharply above 16kHz or lack natural breathing phonetics, while synthesized mouth lips suffer from 40ms to 120ms temporal phase lags.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Scan History Section -->
+        <section class="history-section" id="history-section">
+            <div class="dashboard-card glass-panel">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-clock-rotate-left text-cyan"></i>
+                        <h3>Recent Video Scan Audit Logs</h3>
+                    </div>
+                    <button class="btn btn-sm btn-outline" id="clearHistoryBtn">
+                        <i class="fa-solid fa-trash-can"></i> Clear History
+                    </button>
+                </div>
+                
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Video Name / ID</th>
+                                <th>Scan Date</th>
+                                <th>Duration</th>
+                                <th>Verdict</th>
+                                <th>AI Probability</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Injected dynamically from localStorage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Python Backend API Modal -->
+    <div class="modal-overlay" id="backendModal">
+        <div class="modal-window glass-panel">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-brands fa-python text-emerald"></i>
+                    <h3>Python Neural Engine API Integration</h3>
+                </div>
+                <button class="modal-close" id="closeBackendModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    By default, DeepDetect AI runs an in-browser <strong>Client-Side Forensic Core</strong> using Canvas pixel gradients, Fourier heuristics, and Web Audio.
+                </p>
+                <p>
+                    For deep neural PyTorch weights (e.g. MesoNet, Video-MAE, CLIP), you can start the included local Python server:
+                </p>
+                
+                <div class="code-block-box">
+                    <div class="code-head">
+                        <span>Terminal (PowerShell / Bash)</span>
+                        <button class="copy-btn" id="copyCodeBtn"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <pre><code id="pythonCodeSnippet"># 1. Install dependencies
+pip install fastapi uvicorn opencv-python numpy
+
+# 2. Run the included backend
+python backend.py
+
+# Server will run on: http://127.0.0.1:8000</code></pre>
+                </div>
+
+                <div class="backend-status-toggle">
+                    <label class="switch-label">
+                        <input type="checkbox" id="backendToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="toggle-desc">
+                        <strong>Route scans to Local Python Backend (http://127.0.0.1:8000)</strong>
+                        <span>When enabled, requests are posted to your local Python server for deep learning inference.</span>
+                    </div>
+                </div>
+
+                <div class="backend-ping-status" id="backendPingResult">
+                    <span class="status-dot offline"></span>
+                    <span>Backend Offline (Using Browser Forensic Core)</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="testBackendBtn">
+                    <i class="fa-solid fa-arrows-rotate"></i> Test Connection
+                </button>
+                <button class="btn btn-outline" id="closeBackendModalBtn2">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="brand-group">
+                    <div class="brand-logo sm">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="footer-brand-name">DeepDetect AI</span>
+                </div>
+                <p>Advanced Forensic Video Authentication & Deepfake Detection Platform.</p>
+            </div>
+
+            <div class="footer-meta">
+                <span>Enterprise Forensic Standard • Compliant with C2PA Content Credentials</span>
+                <span class="copyright">© 2026 AI Generated Video Detection. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="samples.js"></script>
+    <script src="detector.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
